@@ -4,11 +4,13 @@ import { m } from 'framer-motion';
 import { Braces, Plus, X, ChevronRight } from 'lucide-react';
 import { useFlowStore } from '../../store/flowStore';
 import { useExecutionStore } from '../../store/executionStore';
+import VariablePicker from '../Common/VariablePicker';
 
 interface ExtractionRow {
     id: string;
     path: string;
     variableName: string;
+    targetType?: 'runtime' | 'env';
 }
 
 const ExtractNode = ({ data, id }: NodeProps) => {
@@ -35,7 +37,7 @@ const ExtractNode = ({ data, id }: NodeProps) => {
         updateNodeData(id, { extractions: extractions.filter(r => r.id !== rowId) });
     };
 
-    const varNames = extractions.filter(r => r.variableName).map(r => `{{${r.variableName}}}`).join(', ');
+    const varNames = extractions.filter(r => r.variableName).map(r => r.targetType === 'env' ? `{{${r.variableName}}}` : r.variableName).join(', ');
 
     return (
         <m.div
@@ -86,12 +88,19 @@ const ExtractNode = ({ data, id }: NodeProps) => {
                                     </div>
                                     <div className="extraction-arrow">→</div>
                                     <div className="inline-field" style={{ flex: 1 }}>
-                                        <label className="inline-label">Variable name</label>
-                                        <input
-                                            className="inline-input nodrag"
+                                        <label className="inline-label">Variable name <span className="var-hint">type {'{{'} for env</span></label>
+                                        <VariablePicker
                                             value={row.variableName}
-                                            onChange={e => updateRow(row.id, { variableName: e.target.value })}
+                                            onChange={(val) => {
+                                                const match = val.match(/\{\{([^{}]+)\}\}/);
+                                                if (match) {
+                                                    updateRow(row.id, { variableName: match[1].trim(), targetType: 'env' });
+                                                } else {
+                                                    updateRow(row.id, { variableName: val.replace(/\{\{|\}\}/g, ''), targetType: 'runtime' });
+                                                }
+                                            }}
                                             placeholder="postId"
+                                            className={row.targetType === 'env' ? 'env-target' : ''}
                                         />
                                     </div>
                                     <button

@@ -6,6 +6,7 @@ import { useFlowStore } from '../../store/flowStore';
 import { useExecutionStore } from '../../store/executionStore';
 import { useCollectionStore } from '../../store/collectionStore';
 import VariablePicker from '../Common/VariablePicker';
+import MonacoField from '../Common/MonacoField';
 
 const METHOD_COLORS: Record<string, string> = {
     GET: '#10b981',
@@ -156,23 +157,23 @@ const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
                     </div>
                     <div className="inline-field">
                         <label className="inline-label">Headers (JSON)</label>
-                        <VariablePicker
+                        <MonacoField
                             value={typeof headers === 'object' ? JSON.stringify(headers, null, 2) : String(headers)}
                             onChange={v => { try { set({ headers: JSON.parse(v) }); } catch { set({ headers: v }); } }}
-                            placeholder='{"Authorization": "Bearer {{authToken}}"}'
-                            multiline
-                            rows={2}
+                            language="json"
+                            height="80px"
                         />
                     </div>
                     {showBody && (
                         <div className="inline-field">
-                            <label className="inline-label">Body (JSON)</label>
-                            <VariablePicker
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                                <label className="inline-label" style={{ marginBottom: 0 }}>Body (raw content)</label>
+                            </div>
+                            <MonacoField
                                 value={body}
                                 onChange={v => set({ body: v })}
-                                placeholder='{"id": "{{postId}}"}'
-                                multiline
-                                rows={3}
+                                language="json"
+                                height="150px"
                             />
                         </div>
                     )}

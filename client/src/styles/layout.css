@@ -979,6 +979,35 @@
     font-size: 0.65rem;
 }
 
+/* ─── Monaco Editor overrides and chips ─── */
+.monaco-editor-wrapper {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: #1e1e1e;
+    transition: border-color 0.2s;
+}
+
+.monaco-editor-wrapper:focus-within {
+    border-color: var(--accent-primary);
+}
+
+.monaco-chip-resolved {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #10b981 !important;
+    border-radius: 3px;
+    padding: 0 4px;
+    font-weight: 600;
+}
+
+.monaco-chip-unresolved {
+    background-color: rgba(245, 158, 11, 0.12) !important;
+    color: #f59e0b !important;
+    border-radius: 3px;
+    padding: 0 4px;
+    font-weight: 600;
+}
+
 
 /* Extract node */
 .extract-node {
