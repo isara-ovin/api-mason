@@ -1267,9 +1267,10 @@
     max-width: 0;
 }
 
-/* ─── Delete buttons (collections & flows) ─── */
+/* ─── Delete & Export buttons (collections & flows) ─── */
 .collection-delete-btn,
-.flow-delete-btn {
+.flow-delete-btn,
+.flow-export-btn {
     display: flex;
     align-items: center;
     gap: 2px;
@@ -1286,16 +1287,26 @@
     flex-shrink: 0;
 }
 
-/* Show delete button on row hover */
+/* Show action buttons on row hover */
 .collection-header:hover .collection-delete-btn,
-.flow-item:hover .flow-delete-btn {
+.flow-item:hover .flow-delete-btn,
+.flow-item:hover .flow-export-btn {
     opacity: 0.5;
 }
 
 .collection-delete-btn:hover,
-.flow-delete-btn:hover {
+.flow-delete-btn:hover,
+.flow-export-btn:hover {
     opacity: 1 !important;
+}
+
+.collection-delete-btn:hover,
+.flow-delete-btn:hover {
     color: #ef4444;
+}
+
+.flow-export-btn:hover {
+    color: var(--accent-primary);
 }
 
 /* Confirming state — amber warning */
