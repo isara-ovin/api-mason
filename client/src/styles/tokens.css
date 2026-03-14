@@ -1,0 +1,74 @@
+:root {
+  /* Colors - Ultra Dark Premium Layout */
+  --bg-primary: #020617;
+  /* Slate 950 */
+  --bg-secondary: #0f172a;
+  /* Slate 900 */
+  --bg-tertiary: #1e293b;
+  /* Slate 800 */
+  --bg-hover: #334155;
+  /* Slate 700 */
+
+  --text-primary: #f8fafc;
+  /* Slate 50 */
+  --text-secondary: #cbd5e1;
+  /* Slate 300 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+  --text-active: #ffffff;
+
+  --accent-primary: #8b5cf6;
+  /* Violet 500 */
+  --accent-secondary: #a855f7;
+  /* Purple 500 */
+  --accent-hover: #7c3aed;
+  /* Violet 600 */
+  --accent-subtle: rgba(139, 92, 246, 0.1);
+
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #eab308;
+  --info: #3b82f6;
+
+  --border-color: #1e293b;
+  /* Slate 800 */
+  --border-hover: #475569;
+  /* Slate 600 */
+
+  /* Node Aesthetics */
+  --node-bg: #0f172a;
+  --node-border: #1e293b;
+  --node-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --node-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+
+  /* Spacing */
+  --spacing-xs: 6px;
+  --spacing-sm: 12px;
+  --spacing-md: 20px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme='light'] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary: #e2e8f0;
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+
+  --border-color: #e2e8f0;
+  --node-bg: #ffffff;
+  --node-border: #cbd5e1;
+}
