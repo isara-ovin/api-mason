@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  apimason:
+    build: .
+    container_name: apimason
+    ports:
+      - "3001:3001"
+    volumes:
+      - apimason-data:/app/server/data
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+
+volumes:
+  apimason-data:
