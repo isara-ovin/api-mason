@@ -6,7 +6,7 @@ import { useCollectionStore } from '../store/collectionStore';
 export function useExecution() {
     const { setStatus, addLog, resetExecution, setCurrentBlock, setVariable } = useExecutionStore();
     const { nodes, edges } = useFlowStore();
-    const { selectedEnvironmentId, environments } = useCollectionStore();
+    const { selectedEnvironmentId, environments, updateEnvironment } = useCollectionStore();
 
     const getBlockName = useCallback((blockId: string): string => {
         const node = nodes.find(n => n.id === blockId);
@@ -19,6 +19,24 @@ export function useExecution() {
             case 'status':
                 setStatus(event.status);
                 if (event.status === 'completed') {
+                    if (event.context?.environment && selectedEnvironmentId) {
+                        const env = environments.find(e => e.id === selectedEnvironmentId);
+                        if (env) {
+                            const newVars = [...env.variables];
+                            for (const [k, v] of Object.entries(event.context.environment)) {
+                                const strVal = String(v);
+                                const existing = newVars.find(x => x.key === k);
+                                if (existing) existing.value = strVal;
+                                else newVars.push({ key: k, value: strVal, enabled: true });
+                            }
+                            updateEnvironment(selectedEnvironmentId, { variables: newVars });
+                            fetch(`http://localhost:3001/api/environments/${selectedEnvironmentId}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ variables: newVars, name: env.name })
+                            }).catch(console.error);
+                        }
+                    }
                     addLog({ status: 'success', blockId: 'system', blockName: 'System', message: 'Flow completed successfully' });
                 }
                 break;
@@ -46,7 +64,7 @@ export function useExecution() {
                 });
                 break;
         }
-    }, [setStatus, addLog, setCurrentBlock, setVariable, getBlockName]);
+    }, [setStatus, addLog, setCurrentBlock, setVariable, getBlockName, environments, selectedEnvironmentId, updateEnvironment]);
 
     const runFlow = useCallback(async () => {
         resetExecution();
