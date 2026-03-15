@@ -97,8 +97,9 @@ const VariablePicker: React.FC<VariablePickerProps> = ({
         value,
         onChange: handleChange,
         placeholder,
-        className: `inline-input nodrag ${className}`,
-        style: { position: 'relative' as const }
+        className: `inline-input nodrag nopan ${className}`,
+        style: { position: 'relative' as const },
+        onKeyDown: (e: React.KeyboardEvent) => e.stopPropagation()
     };
 
     return (

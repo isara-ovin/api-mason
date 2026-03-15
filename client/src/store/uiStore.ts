@@ -3,17 +3,21 @@ import { create } from 'zustand';
 interface UIState {
     theme: 'dark' | 'light';
     isSidebarOpen: boolean;
+    isEnvPanelOpen: boolean;
     selectedBlockId: string | null;
 
     toggleTheme: () => void;
     setTheme: (theme: 'dark' | 'light') => void;
     toggleSidebar: () => void;
+    toggleEnvPanel: () => void;
+    setEnvPanelOpen: (open: boolean) => void;
     setSelectedBlock: (id: string | null) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
     theme: 'dark',
     isSidebarOpen: true,
+    isEnvPanelOpen: false,
     selectedBlockId: null,
 
     toggleTheme: () => set((state) => {
@@ -28,5 +32,7 @@ export const useUIStore = create<UIState>((set) => ({
     },
 
     toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+    toggleEnvPanel: () => set((state) => ({ isEnvPanelOpen: !state.isEnvPanelOpen })),
+    setEnvPanelOpen: (open) => set({ isEnvPanelOpen: open }),
     setSelectedBlock: (id) => set({ selectedBlockId: id }),
 }));

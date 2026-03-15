@@ -41,6 +41,27 @@ router.post('/import', (req, res) => {
     }
 });
 
+// Update environment properties or variables
+router.put('/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, variables } = req.body;
+
+        // Fetch existing environment to ensure it exists
+        const existing = db.prepare('SELECT id FROM environments WHERE id = ?').get(id);
+        if (!existing) {
+            return res.status(404).json({ error: 'Environment not found' });
+        }
+
+        const stmt = db.prepare('UPDATE environments SET name = ?, variables = ? WHERE id = ?');
+        stmt.run(name, JSON.stringify(variables || []), id);
+
+        res.json({ success: true, id, name });
+    } catch (error: any) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 // Delete environment
 router.delete('/:id', (req, res) => {
     db.prepare('DELETE FROM environments WHERE id = ?').run(req.params.id);

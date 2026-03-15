@@ -3,6 +3,7 @@ import { useExecution } from '../../hooks/useExecution';
 import { useOrchestration } from '../../hooks/useOrchestration';
 import { useExecutionStore } from '../../store/executionStore';
 import { useCollectionStore } from '../../store/collectionStore';
+import { useUIStore } from '../../store/uiStore';
 import { Play, Loader2, Save, FileJson, FileEdit, ChevronDown, Leaf, FilePlus2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -10,6 +11,7 @@ const Toolbar: React.FC = () => {
     const { runFlow } = useExecution();
     const { saveOrchestration, newOrchestration } = useOrchestration();
     const status = useExecutionStore((state) => state.status);
+    const { toggleEnvPanel } = useUIStore();
     const [name, setName] = useState('New Orchestration');
 
     const { environments, selectedEnvironmentId, setEnvironments, setSelectedEnvironment, addEnvironment } = useCollectionStore();
@@ -124,7 +126,14 @@ const Toolbar: React.FC = () => {
                             ))}
                         </select>
                         {selectedEnv && (
-                            <span className="env-var-count">{selectedEnv.variables?.length || 0} vars</span>
+                            <span
+                                className="env-var-count"
+                                onClick={toggleEnvPanel}
+                                style={{ cursor: 'pointer' }}
+                                title="Manage variables"
+                            >
+                                {selectedEnv.variables?.length || 0} vars
+                            </span>
                         )}
                     </div>
                 )}

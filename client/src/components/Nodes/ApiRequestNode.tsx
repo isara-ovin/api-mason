@@ -57,6 +57,7 @@ export const UrlPreview: React.FC<{
 const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
     const [expanded, setExpanded] = useState(false);
     const updateNodeData = useFlowStore(s => s.updateNodeData);
+    const updateNodeDimensions = useFlowStore(s => s.updateNodeDimensions);
     const currentBlockId = useExecutionStore(s => s.currentBlockId);
     const { environments, selectedEnvironmentId } = useCollectionStore();
     const isExecuting = currentBlockId === id;
@@ -82,6 +83,19 @@ const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
         updateNodeData(id, patch);
     }, [id, updateNodeData]);
 
+    const toggleExpanded = useCallback((e?: React.MouseEvent) => {
+        e?.stopPropagation();
+        if (expanded) {
+            // Collapsing: Save dimensions right NOW while it's still large in the store
+            updateNodeDimensions(id, false);
+            setExpanded(false);
+        } else {
+            // Expanding: Restore dimensions right NOW
+            updateNodeDimensions(id, true);
+            setExpanded(true);
+        }
+    }, [expanded, id, updateNodeDimensions]);
+
     const showBody = ['POST', 'PUT', 'PATCH'].includes(method);
 
     // Check if the URL has any {{VAR}} tokens to show in edit mode
@@ -94,9 +108,9 @@ const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
-            {/* Resizer — visible when node is selected */}
+            {/* Resizer — visible when node is selected AND expanded */}
             <NodeResizer
-                isVisible={!!selected}
+                isVisible={!!selected && expanded}
                 minWidth={240}
                 minHeight={70}
                 handleStyle={{ width: 8, height: 8, borderRadius: 2 }}
@@ -105,7 +119,7 @@ const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
 
             <Handle type="target" position={Position.Left} className="node-handle-left" />
 
-            <div className="node-header" onClick={() => setExpanded(e => !e)}>
+            <div className="node-header" onClick={toggleExpanded}>
                 <span className="node-icon"><Globe size={14} /></span>
                 <span className="node-title" style={{ flex: 1 }}>{label}</span>
                 <span className="node-method-badge" style={{ color: methodColor }}>{method}</span>
@@ -159,7 +173,7 @@ const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
                         <label className="inline-label">Headers (JSON)</label>
                         <MonacoField
                             value={typeof headers === 'object' ? JSON.stringify(headers, null, 2) : String(headers)}
-                            onChange={v => { try { set({ headers: JSON.parse(v) }); } catch { set({ headers: v }); } }}
+                            onChange={v => set({ headers: v })}
                             language="json"
                             height="80px"
                         />

@@ -140,7 +140,10 @@ const MonacoField: React.FC<MonacoFieldProps> = ({
     };
 
     return (
-        <div className={`monaco-editor-wrapper nodrag ${className}`}>
+        <div
+            className={`monaco-editor-wrapper nodrag nopan ${className}`}
+            onKeyDown={(e) => e.stopPropagation()}
+        >
             <Editor
                 height={height}
                 language={language}

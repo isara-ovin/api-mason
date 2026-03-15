@@ -3,6 +3,7 @@ import FlowCanvas from './components/Canvas/FlowCanvas';
 import Sidebar from './components/Sidebar/Sidebar';
 import Toolbar from './components/Toolbar/Toolbar';
 import ExecutionLogPanel from './components/Panels/ExecutionLogPanel';
+import EnvVariablesPanel from './components/Panels/EnvVariablesPanel';
 import { Toaster } from 'react-hot-toast';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import { Box, Sun, Moon } from 'lucide-react';
@@ -37,6 +38,7 @@ function App() {
                   <ExecutionLogPanel />
                 </div>
               </div>
+              <EnvVariablesPanel />
             </div>
           </section>
         </main>

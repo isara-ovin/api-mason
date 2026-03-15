@@ -92,12 +92,8 @@ const ExtractNode = ({ data, id }: NodeProps) => {
                                         <VariablePicker
                                             value={row.variableName}
                                             onChange={(val) => {
-                                                const match = val.match(/\{\{([^{}]+)\}\}/);
-                                                if (match) {
-                                                    updateRow(row.id, { variableName: match[1].trim(), targetType: 'env' });
-                                                } else {
-                                                    updateRow(row.id, { variableName: val.replace(/\{\{|\}\}/g, ''), targetType: 'runtime' });
-                                                }
+                                                const isEnv = val.includes('{{');
+                                                updateRow(row.id, { variableName: val, targetType: isEnv ? 'env' : 'runtime' });
                                             }}
                                             placeholder="postId"
                                             className={row.targetType === 'env' ? 'env-target' : ''}

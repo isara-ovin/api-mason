@@ -33,6 +33,7 @@ interface CollectionState {
 
     setEnvironments: (environments: Environment[]) => void;
     addEnvironment: (env: Environment) => void;
+    updateEnvironment: (id: string, updates: Partial<Environment>) => void;
     removeEnvironment: (id: string) => void;
     setSelectedEnvironment: (id: string | null) => void;
 }
@@ -53,6 +54,9 @@ export const useCollectionStore = create<CollectionState>((set) => ({
     setEnvironments: (environments) => set({ environments }),
     addEnvironment: (env) => set((state) => ({
         environments: [...state.environments.filter(e => e.id !== env.id), env]
+    })),
+    updateEnvironment: (id, updates) => set((state) => ({
+        environments: state.environments.map(e => e.id === id ? { ...e, ...updates } : e)
     })),
     removeEnvironment: (id) => set((state) => ({
         environments: state.environments.filter(e => e.id !== id)

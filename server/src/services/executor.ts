@@ -116,11 +116,24 @@ export class FlowExecutor {
 
     private async handleApiRequest(data: any) {
         // Resolve ALL fields — URL, headers (values), and body
-        const resolvedUrl = this.resolveVariables(data.url);
+        let resolvedUrl = this.resolveVariables(data.url) || '';
         const resolvedBody = this.resolveVariables(data.body);
 
+        // Enforce protocol to prevent 'Invalid URL' errors from axios
+        if (resolvedUrl && !/^https?:\/\//i.test(resolvedUrl)) {
+            resolvedUrl = 'http://' + resolvedUrl;
+        }
+
         // Deep-resolve each header value
-        const rawHeaders = data.headers || {};
+        let rawHeaders = data.headers || {};
+        if (typeof rawHeaders === 'string') {
+            try {
+                rawHeaders = JSON.parse(rawHeaders);
+            } catch {
+                rawHeaders = {}; // fallback if badly formed
+            }
+        }
+
         const resolvedHeaders: Record<string, string> = {};
         for (const [key, value] of Object.entries(rawHeaders)) {
             resolvedHeaders[key] = this.resolveVariables(String(value));
@@ -158,12 +171,14 @@ export class FlowExecutor {
             try {
                 const value = jsonpath.value(sourceResult, row.path);
                 if (value !== undefined) {
-                    const name = row.variableName;
+                    let name = row.variableName;
                     if (row.targetType === 'env') {
                         // Overwrite the environment variable at runtime (simulates pm.environment.set)
+                        name = name.replace(/\{\{|\}\}/g, '').trim();
                         this.context.environment[name] = value;
                     } else {
                         // Default: write to runtime variables (highest priority)
+                        name = name.replace(/\{\{|\}\}/g, '').trim();
                         this.context.variables[name] = value;
                     }
                     extracted[name] = value;

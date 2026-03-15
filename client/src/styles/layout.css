@@ -206,6 +206,99 @@
     overflow-y: auto;
 }
 
+.env-variables-panel {
+    width: 350px;
+    border-left: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.env-vars-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding-bottom: var(--spacing-md);
+}
+
+.env-var-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    background-color: var(--bg-primary);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.env-var-row.disabled {
+    opacity: 0.5;
+}
+
+.env-var-input {
+    background: var(--bg-tertiary);
+    border: 1px solid transparent;
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: var(--transition-fast);
+}
+
+.env-var-input:focus {
+    border-color: var(--accent-primary);
+}
+
+.env-var-input.key {
+    flex: 1;
+    min-width: 0;
+}
+
+.env-var-input.value {
+    flex: 1.5;
+    min-width: 0;
+}
+
+.equals {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+}
+
+.btn-icon:hover {
+    color: var(--error);
+    background-color: var(--bg-hover);
+}
+
+.btn.flex-1 {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.panel-footer {
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: auto;
+}
+
 .toolbar {
     height: 48px;
     background-color: var(--bg-primary);
