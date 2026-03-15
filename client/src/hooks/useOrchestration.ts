@@ -4,16 +4,17 @@ import { useExecutionStore } from '../store/executionStore';
 import toast from 'react-hot-toast';
 
 export function useOrchestration() {
-    const { nodes, edges, setNodes, setEdges } = useFlowStore();
+    const { nodes, edges, setNodes, setEdges, orchestrationId, orchestrationName, setOrchestrationId, setOrchestrationName } = useFlowStore();
     const { resetExecution } = useExecutionStore();
 
-    const saveOrchestration = useCallback(async (name: string, id?: string) => {
+    const saveOrchestration = useCallback(async () => {
         try {
-            const response = await fetch('http://localhost:3001/api/orchestrations' + (id ? `/${id}` : ''), {
-                method: id ? 'PUT' : 'POST',
+            const url = 'http://localhost:3001/api/orchestrations' + (orchestrationId ? `/${orchestrationId}` : '');
+            const response = await fetch(url, {
+                method: orchestrationId ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name,
+                    name: orchestrationName,
                     flow_data: { nodes, edges }
                 }),
             });
@@ -21,12 +22,16 @@ export function useOrchestration() {
             if (!response.ok) throw new Error('Failed to save orchestration');
 
             const result = await response.json();
-            toast.success(`"${name}" saved!`);
+            if (!orchestrationId && result.id) {
+                setOrchestrationId(result.id);
+            }
+            toast.success(`"${orchestrationName}" saved!`);
+            window.dispatchEvent(new Event('flow-saved'));
             return result;
         } catch (error: any) {
             toast.error(`Save failed: ${error.message}`);
         }
-    }, [nodes, edges]);
+    }, [nodes, edges, orchestrationId, orchestrationName, setOrchestrationId]);
 
     const loadOrchestration = useCallback(async (id: string) => {
         try {
@@ -38,19 +43,23 @@ export function useOrchestration() {
                 setNodes(data.flow_data.nodes || []);
                 setEdges(data.flow_data.edges || []);
             }
+            setOrchestrationId(data.id);
+            setOrchestrationName(data.name);
             resetExecution();
             toast.success(`Loaded "${data.name}"`);
         } catch (error: any) {
             toast.error(`Load failed: ${error.message}`);
         }
-    }, [setNodes, setEdges, resetExecution]);
+    }, [setNodes, setEdges, resetExecution, setOrchestrationId, setOrchestrationName]);
 
     const newOrchestration = useCallback(() => {
         setNodes([]);
         setEdges([]);
+        setOrchestrationId(null);
+        setOrchestrationName('New Orchestration');
         resetExecution();
         toast.success('New orchestration started');
-    }, [setNodes, setEdges, resetExecution]);
+    }, [setNodes, setEdges, resetExecution, setOrchestrationId, setOrchestrationName]);
 
     return { saveOrchestration, loadOrchestration, newOrchestration };
 }

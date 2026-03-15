@@ -4,7 +4,9 @@ import { m } from 'framer-motion';
 import { Braces, Plus, X, ChevronRight } from 'lucide-react';
 import { useFlowStore } from '../../store/flowStore';
 import { useExecutionStore } from '../../store/executionStore';
+import { useCollectionStore } from '../../store/collectionStore';
 import VariablePicker from '../Common/VariablePicker';
+import { UrlPreview } from './ApiRequestNode';
 
 interface ExtractionRow {
     id: string;
@@ -16,11 +18,21 @@ interface ExtractionRow {
 const ExtractNode = ({ data, id }: NodeProps) => {
     const [expanded, setExpanded] = useState(false);
     const updateNodeData = useFlowStore(s => s.updateNodeData);
+    const { environments, selectedEnvironmentId } = useCollectionStore();
     const currentBlockId = useExecutionStore(s => s.currentBlockId);
     const isExecuting = currentBlockId === id;
 
     const extractions: ExtractionRow[] = (data.extractions as ExtractionRow[]) || [];
     const label = (data.label as string) || 'Extract';
+
+    // Build varMap from active env for chip rendering
+    const varMap: Record<string, string> = {};
+    const activeEnv = environments.find(e => e.id === selectedEnvironmentId);
+    if (activeEnv?.variables) {
+        for (const v of activeEnv.variables) {
+            if (v.enabled !== false && v.key) varMap[v.key] = v.value ?? '';
+        }
+    }
 
     const addRow = () => {
         const newRow: ExtractionRow = { id: Math.random().toString(36).substr(2, 8), path: '', variableName: '' };
@@ -37,7 +49,10 @@ const ExtractNode = ({ data, id }: NodeProps) => {
         updateNodeData(id, { extractions: extractions.filter(r => r.id !== rowId) });
     };
 
-    const varNames = extractions.filter(r => r.variableName).map(r => r.targetType === 'env' ? `{{${r.variableName}}}` : r.variableName).join(', ');
+    const varUrl = extractions
+        .filter(r => r.variableName)
+        .map(r => r.targetType === 'env' ? `{{${r.variableName}}}` : r.variableName)
+        .join(', ');
 
     return (
         <m.div
@@ -57,7 +72,10 @@ const ExtractNode = ({ data, id }: NodeProps) => {
                 <div className="node-content">
                     {extractions.length === 0
                         ? 'No extractions — click to add'
-                        : `${extractions.length} extraction${extractions.length > 1 ? 's' : ''} → ${varNames}`
+                        : <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <span style={{ whiteSpace: 'nowrap' }}>{extractions.length} extraction{extractions.length > 1 ? 's' : ''} →</span>
+                            <UrlPreview url={varUrl} varMap={varMap} compact />
+                        </div>
                     }
                 </div>
             )}

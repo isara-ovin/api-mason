@@ -1,0 +1,55 @@
+/* Variable Picker Overlay styles */
+.var-picker-container {
+    position: relative;
+    width: 100%;
+}
+
+.var-picker-transparent {
+    position: relative;
+    z-index: 2;
+    background: transparent !important;
+    color: transparent !important;
+    /* Hide real text */
+    caret-color: var(--text-primary);
+    /* Keep the blinking cursor visible */
+    width: 100%;
+}
+
+.var-picker-transparent::placeholder {
+    color: transparent;
+    /* Hide real placeholder */
+}
+
+.var-picker-visual {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: pre;
+    color: var(--text-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+}
+
+.var-picker-visual.singleline {
+    white-space: nowrap;
+}
+
+.var-picker-visual.multiline {
+    white-space: pre-wrap;
+    align-items: flex-start;
+}
+
+.var-placeholder {
+    color: var(--text-muted);
+}
+
+.var-literal {
+    color: var(--text-primary);
+}

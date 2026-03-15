@@ -103,12 +103,39 @@ const VariablePicker: React.FC<VariablePickerProps> = ({
     };
 
     return (
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative' }} className="var-picker-container">
+            {/* The transparent actual input for typing */}
             {multiline ? (
-                <textarea {...sharedProps} rows={rows} className={`inline-textarea nodrag ${className}`} />
+                <textarea {...sharedProps} rows={rows} className={`inline-textarea nodrag var-picker-transparent ${className}`} />
             ) : (
-                <input {...sharedProps} />
+                <input {...sharedProps} className={`inline-input nodrag var-picker-transparent nopan ${className}`} />
             )}
+
+            {/* The fake visual underlay displaying the text + chips */}
+            <div className={`var-picker-visual ${multiline ? 'multiline' : 'singleline'} ${className}`}>
+                {value ? (
+                    value.split(/(\{\{[^{}]+\}\})/g).map((part, i) => {
+                        const match = part.match(/^\{\{([^{}]+)\}\}$/);
+                        if (!match) return <span key={i} className="var-literal">{part}</span>;
+
+                        const varName = match[1].trim();
+                        // See if it exists in any of our env or upstream extract sources
+                        const isResolved = allVars.some(v => v.name === varName);
+
+                        return (
+                            <span
+                                key={i}
+                                className={`url-var-chip ${isResolved ? 'resolved' : 'unresolved'}`}
+                            >
+                                {`{{${varName}}}`}
+                            </span>
+                        );
+                    })
+                ) : (
+                    <span className="var-placeholder">{placeholder}</span>
+                )}
+            </div>
+
             {showPicker && (filtered.length > 0 || allVars.length === 0) && (
                 <div className="var-picker-dropdown nodrag">
                     {filtered.length === 0 && (

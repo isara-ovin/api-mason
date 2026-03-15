@@ -22,11 +22,21 @@ interface FlowState {
     addNode: (node: Node) => void;
     updateNodeData: (id: string, data: Record<string, unknown>) => void;
     updateNodeDimensions: (id: string, isExpanded: boolean) => void;
+
+    orchestrationId: string | null;
+    orchestrationName: string;
+    setOrchestrationId: (id: string | null) => void;
+    setOrchestrationName: (name: string) => void;
 }
 
 export const useFlowStore = create<FlowState>((set, get) => ({
     nodes: [],
     edges: [],
+
+    orchestrationId: null,
+    orchestrationName: 'New Orchestration',
+    setOrchestrationId: (id) => set({ orchestrationId: id }),
+    setOrchestrationName: (name) => set({ orchestrationName: name }),
 
     onNodesChange: (changes) => {
         set({

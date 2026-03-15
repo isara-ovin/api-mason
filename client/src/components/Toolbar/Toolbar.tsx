@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useExecution } from '../../hooks/useExecution';
 import { useOrchestration } from '../../hooks/useOrchestration';
 import { useExecutionStore } from '../../store/executionStore';
 import { useCollectionStore } from '../../store/collectionStore';
 import { useUIStore } from '../../store/uiStore';
+import { useFlowStore } from '../../store/flowStore';
 import { Play, Loader2, Save, FileJson, FileEdit, ChevronDown, Leaf, FilePlus2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -12,7 +13,7 @@ const Toolbar: React.FC = () => {
     const { saveOrchestration, newOrchestration } = useOrchestration();
     const status = useExecutionStore((state) => state.status);
     const { toggleEnvPanel } = useUIStore();
-    const [name, setName] = useState('New Orchestration');
+    const { orchestrationName, setOrchestrationName } = useFlowStore();
 
     const { environments, selectedEnvironmentId, setEnvironments, setSelectedEnvironment, addEnvironment } = useCollectionStore();
 
@@ -142,15 +143,14 @@ const Toolbar: React.FC = () => {
             <div className="flow-name-container">
                 <FileEdit size={14} style={{ color: 'var(--text-muted)' }} />
                 <input
-                    type="text"
-                    className="flow-name-input"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter flow name..."
+                    className="canvas-title-input"
+                    value={orchestrationName}
+                    onChange={(e) => setOrchestrationName(e.target.value)}
+                    placeholder="Orchestration Name"
                 />
                 <button
                     className="btn btn-ghost new-orch-btn"
-                    onClick={() => { newOrchestration(); setName('New Orchestration'); }}
+                    onClick={() => { newOrchestration(); setOrchestrationName('New Orchestration'); }}
                     title="Clear canvas and start a new orchestration"
                 >
                     <FilePlus2 size={14} /> New
@@ -158,15 +158,11 @@ const Toolbar: React.FC = () => {
             </div>
 
             <div className="toolbar-right">
-                <button className="btn btn-secondary" onClick={() => saveOrchestration(name)}>
-                    <Save size={16} /> Save Pattern
+                <button className="btn btn-secondary" onClick={() => saveOrchestration()} title="Save">
+                    <Save size={14} /> Save
                 </button>
-                <button
-                    className={`btn play-btn ${status === 'running' ? 'running' : ''}`}
-                    onClick={runFlow}
-                    disabled={status === 'running'}
-                >
-                    {status === 'running' ? <Loader2 size={16} className="animate-spin" /> : <Play size={16} />}
+                <button className="btn btn-primary" onClick={runFlow} disabled={status === 'running'} title="Run Flow">
+                    {status === 'running' ? <Loader2 size={14} className="spin" /> : <Play size={14} />}
                     {status === 'running' ? 'Running...' : 'Execute Flow'}
                 </button>
             </div>

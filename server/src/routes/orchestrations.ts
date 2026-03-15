@@ -38,6 +38,44 @@ router.post('/', (req, res) => {
     }
 });
 
+// Update orchestration
+router.put('/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, description, flow_data, collection_id, environment_id } = req.body;
+
+        const check = db.prepare('SELECT id FROM orchestrations WHERE id = ?').get(id);
+        if (!check) {
+            return res.status(404).json({ error: 'Orchestration not found' });
+        }
+
+        const sql = `
+            UPDATE orchestrations SET 
+                name = COALESCE(?, name),
+                description = COALESCE(?, description),
+                flow_data = COALESCE(?, flow_data),
+                collection_id = COALESCE(?, collection_id),
+                environment_id = COALESCE(?, environment_id),
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `;
+
+        const stmt = db.prepare(sql);
+        stmt.run(
+            name,
+            description,
+            flow_data ? JSON.stringify(flow_data) : null,
+            collection_id || null,
+            environment_id || null,
+            id
+        );
+
+        res.json({ success: true, id, name });
+    } catch (error: any) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 // Get single orchestration
 router.get('/:id', (req, res) => {
     const orch = db.prepare('SELECT * FROM orchestrations WHERE id = ?').get(req.params.id) as any;

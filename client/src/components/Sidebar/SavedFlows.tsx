@@ -17,6 +17,10 @@ const SavedFlows: React.FC = () => {
 
     useEffect(() => {
         fetchFlows();
+
+        const handleFlowSaved = () => fetchFlows();
+        window.addEventListener('flow-saved', handleFlowSaved);
+        return () => window.removeEventListener('flow-saved', handleFlowSaved);
     }, []);
 
     const handleDelete = async (e: React.MouseEvent, id: string) => {
