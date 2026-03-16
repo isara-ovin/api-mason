@@ -606,6 +606,31 @@
     right: -8px !important;
 }
 
+.node-handle-top,
+.node-handle-bottom {
+    width: 28px !important;
+    height: 14px !important;
+    border-radius: 14px !important;
+    background-color: var(--accent-primary) !important;
+    border: 2px solid var(--bg-primary) !important;
+    opacity: 0.7;
+    transition: opacity 0.15s, transform 0.15s !important;
+}
+
+.node-handle-top:hover,
+.node-handle-bottom:hover {
+    opacity: 1;
+    transform: scaleY(1.3) !important;
+}
+
+.node-handle-top {
+    top: -8px !important;
+}
+
+.node-handle-bottom {
+    bottom: -8px !important;
+}
+
 .react-flow__edge-path {
     stroke: var(--text-muted);
     stroke-width: 2;

@@ -24,7 +24,7 @@ export const useKeyboardShortcuts = (currentFlowName: string) => {
             // Save: Cmd/Ctrl + S
             if ((event.metaKey || event.ctrlKey) && event.key === 's') {
                 event.preventDefault();
-                saveOrchestration(currentFlowName);
+                saveOrchestration();
             }
 
             // Execute: Cmd/Ctrl + Enter

@@ -30,7 +30,7 @@ export function useExecution() {
                                 else newVars.push({ key: k, value: strVal, enabled: true });
                             }
                             updateEnvironment(selectedEnvironmentId, { variables: newVars });
-                            fetch(`http://localhost:3001/api/environments/${selectedEnvironmentId}`, {
+                            fetch(`/api/environments/${selectedEnvironmentId}`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ variables: newVars, name: env.name })
@@ -76,7 +76,7 @@ export function useExecution() {
             .reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {}) || {};
 
         try {
-            const response = await fetch('http://localhost:3001/api/execute', {
+            const response = await fetch('/api/execute', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nodes, edges, environment }),

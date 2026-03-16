@@ -9,7 +9,7 @@ export function useOrchestration() {
 
     const saveOrchestration = useCallback(async () => {
         try {
-            const url = 'http://localhost:3001/api/orchestrations' + (orchestrationId ? `/${orchestrationId}` : '');
+            const url = '/api/orchestrations' + (orchestrationId ? `/${orchestrationId}` : '');
             const response = await fetch(url, {
                 method: orchestrationId ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -35,7 +35,7 @@ export function useOrchestration() {
 
     const loadOrchestration = useCallback(async (id: string) => {
         try {
-            const response = await fetch(`http://localhost:3001/api/orchestrations/${id}`);
+            const response = await fetch(`/api/orchestrations/${id}`);
             if (!response.ok) throw new Error('Failed to load orchestration');
 
             const data = await response.json();

@@ -9,7 +9,7 @@ const SavedFlows: React.FC = () => {
     const [confirmId, setConfirmId] = useState<string | null>(null);
 
     const fetchFlows = () => {
-        fetch('http://localhost:3001/api/orchestrations')
+        fetch('/api/orchestrations')
             .then(res => res.json())
             .then(setFlows)
             .catch(() => toast.error('Failed to fetch saved flows'));
@@ -31,7 +31,7 @@ const SavedFlows: React.FC = () => {
             return;
         }
         try {
-            const res = await fetch(`http://localhost:3001/api/orchestrations/${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/orchestrations/${id}`, { method: 'DELETE' });
             if (!res.ok) throw new Error('Delete failed');
             toast.success('Flow deleted');
             setFlows(prev => prev.filter(f => f.id !== id));
@@ -44,7 +44,7 @@ const SavedFlows: React.FC = () => {
     const handleExport = async (e: React.MouseEvent, id: string, name: string) => {
         e.stopPropagation();
         try {
-            const res = await fetch(`http://localhost:3001/api/orchestrations/${id}`);
+            const res = await fetch(`/api/orchestrations/${id}`);
             if (!res.ok) throw new Error('Failed to fetch flow for export');
             const data = await res.json();
 
@@ -77,7 +77,7 @@ const SavedFlows: React.FC = () => {
                     throw new Error('Invalid flow file format');
                 }
 
-                const res = await fetch('http://localhost:3001/api/orchestrations', {
+                const res = await fetch('/api/orchestrations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

@@ -116,7 +116,7 @@ const CollectionSection: React.FC<{
             return;
         }
         try {
-            const res = await fetch(`http://localhost:3001/api/collections/${collection.id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/collections/${collection.id}`, { method: 'DELETE' });
             if (!res.ok) throw new Error('Delete failed');
             toast.success(`Deleted "${collection.name}"`);
             onDelete(collection.id);
@@ -168,12 +168,12 @@ const CollectionTree: React.FC = () => {
     useEffect(() => {
         const fetchCollections = async () => {
             try {
-                const listRes = await fetch('http://localhost:3001/api/collections');
+                const listRes = await fetch('/api/collections');
                 const list: { id: string; name: string }[] = await listRes.json();
 
                 const detailed = await Promise.all(
                     list.map(async (col) => {
-                        const res = await fetch(`http://localhost:3001/api/collections/${col.id}`);
+                        const res = await fetch(`/api/collections/${col.id}`);
                         return res.json() as Promise<Collection>;
                     })
                 );

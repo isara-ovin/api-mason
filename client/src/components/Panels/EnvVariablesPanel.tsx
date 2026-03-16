@@ -53,7 +53,7 @@ const EnvVariablesPanel: React.FC = () => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const response = await fetch(`http://localhost:3001/api/environments/${activeEnv.id}`, {
+            const response = await fetch(`/api/environments/${activeEnv.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

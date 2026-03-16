@@ -19,13 +19,13 @@ const Toolbar: React.FC = () => {
 
     // Fetch environments on mount
     useEffect(() => {
-        fetch('http://localhost:3001/api/environments')
+        fetch('/api/environments')
             .then(r => r.json())
             .then((list: any[]) => {
                 // list comes back without variables array — we need to fetch each
                 Promise.all(
                     list.map(async (env) => {
-                        const res = await fetch(`http://localhost:3001/api/environments/${env.id}`);
+                        const res = await fetch(`/api/environments/${env.id}`);
                         if (!res.ok) return { ...env, variables: [] };
                         return res.json();
                     })
@@ -44,7 +44,7 @@ const Toolbar: React.FC = () => {
                 const json = event.target?.result as string;
                 JSON.parse(json);
 
-                const response = await fetch('http://localhost:3001/api/collections/import', {
+                const response = await fetch('/api/collections/import', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ json })
@@ -71,7 +71,7 @@ const Toolbar: React.FC = () => {
                 const json = event.target?.result as string;
                 JSON.parse(json);
 
-                const response = await fetch('http://localhost:3001/api/environments/import', {
+                const response = await fetch('/api/environments/import', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ json })
@@ -81,7 +81,7 @@ const Toolbar: React.FC = () => {
                 const { id, name: envName } = await response.json();
 
                 // Fetch the full env with variables
-                const envRes = await fetch(`http://localhost:3001/api/environments/${id}`);
+                const envRes = await fetch(`/api/environments/${id}`);
                 const fullEnv = envRes.ok ? await envRes.json() : { id, name: envName, variables: [] };
 
                 addEnvironment(fullEnv);
@@ -102,7 +102,7 @@ const Toolbar: React.FC = () => {
             <div className="toolbar-left">
                 {/* Import Collection */}
                 <label className="btn btn-secondary" style={{ cursor: 'pointer' }} title="Import Postman Collection JSON">
-                    <FileJson size={16} /> Import JSON
+                    <FileJson size={16} /> Import Collection
                     <input type="file" accept=".json" style={{ display: 'none' }} onChange={handleCollectionUpload} />
                 </label>
 

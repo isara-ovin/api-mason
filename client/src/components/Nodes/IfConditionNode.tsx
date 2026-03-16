@@ -19,7 +19,8 @@ const IfConditionNode = ({ data, id }: NodeProps) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
         >
-            <Handle type="target" position={Position.Left} className="node-handle-left" />
+            <Handle type="target" position={Position.Left} id="left" className="node-handle-left" />
+            <Handle type="target" position={Position.Top} id="top" className="node-handle-top" />
             <div className="node-header" onClick={() => setEditing(e => !e)}>
                 <span className="node-icon"><GitBranch size={14} /></span>
                 <span className="node-title">{label}</span>
@@ -46,7 +47,7 @@ const IfConditionNode = ({ data, id }: NodeProps) => {
                 </div>
                 <div className="if-output false">
                     False
-                    <Handle type="source" position={Position.Bottom} id="false" style={{ bottom: '-8px', left: '50%' }} />
+                    <Handle type="source" position={Position.Bottom} id="false" className="node-handle-bottom" />
                 </div>
             </div>
         </m.div>

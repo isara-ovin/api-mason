@@ -60,7 +60,8 @@ const ExtractNode = ({ data, id }: NodeProps) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
         >
-            <Handle type="target" position={Position.Left} className="node-handle-left" />
+            <Handle type="target" position={Position.Left} id="left" className="node-handle-left" />
+            <Handle type="target" position={Position.Top} id="top" className="node-handle-top" />
 
             <div className="node-header" onClick={() => setExpanded(e => !e)}>
                 <span className="node-icon"><Braces size={14} /></span>
@@ -135,7 +136,8 @@ const ExtractNode = ({ data, id }: NodeProps) => {
                 </div>
             )}
 
-            <Handle type="source" position={Position.Right} className="node-handle-right" />
+            <Handle type="source" position={Position.Right} id="right" className="node-handle-right" />
+            <Handle type="source" position={Position.Bottom} id="bottom" className="node-handle-bottom" />
         </m.div>
     );
 };

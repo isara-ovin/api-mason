@@ -7,6 +7,8 @@ import {
     BackgroundVariant,
     useReactFlow,
     ReactFlowProvider,
+    type Connection,
+    type Edge,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useFlowStore } from '../../store/flowStore';
@@ -102,6 +104,37 @@ const FlowCanvasInner: React.FC = () => {
         [screenToFlowPosition, addNode, setSelectedBlock, environments, selectedEnvironmentId]
     );
 
+    const isValidConnection = useCallback((connection: Connection | Edge) => {
+        if (!connection.source || !connection.target) return false;
+        if (connection.source === connection.target) return false; // No self-loops
+
+        // 1. Max 1 incoming edge per target node generic rule
+        const incomingsToTarget = edges.filter(e => e.target === connection.target);
+        if (incomingsToTarget.length >= 1) {
+            // If it's the exact same edge, it's fine (e.g. during re-connecting)
+            // But React Flow handles that usually. For new connections, block if target already has an input.
+            return false;
+        }
+
+        // 2. Max 1 outgoing edge constraint
+        const sourceNode = nodes.find(n => n.id === connection.source);
+        if (!sourceNode) return false;
+
+        if (sourceNode.type === 'ifCondition') {
+            // Branching nodes can have 1 edge per specific boolean handle port
+            const outgoingsFromHandle = edges.filter(
+                e => e.source === connection.source && e.sourceHandle === connection.sourceHandle
+            );
+            if (outgoingsFromHandle.length >= 1) return false;
+        } else {
+            // Standard linear nodes can only have 1 outgoing edge total across any out port
+            const outgoingsTotal = edges.filter(e => e.source === connection.source);
+            if (outgoingsTotal.length >= 1) return false;
+        }
+
+        return true;
+    }, [edges, nodes]);
+
     return (
         <div ref={reactFlowWrapper} style={{ width: '100%', height: '100%' }}>
             <ReactFlow
@@ -112,12 +145,15 @@ const FlowCanvasInner: React.FC = () => {
                 onConnect={onConnect}
                 onNodeClick={(_, node) => setSelectedBlock(node.id)}
                 onPaneClick={() => setSelectedBlock(null)}
+                isValidConnection={isValidConnection}
                 onDrop={onDrop}
                 onDragOver={onDragOver}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 defaultEdgeOptions={{ type: 'animated' }}
                 colorMode={theme}
+                minZoom={0.05}
+                maxZoom={4}
                 fitView
             >
                 <Background

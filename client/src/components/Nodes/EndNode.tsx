@@ -15,7 +15,8 @@ const EndNode = ({ id }: NodeProps) => {
             animate={{ scale: 1, opacity: 1 }}
             whileHover={{ scale: 1.05 }}
         >
-            <Handle type="target" position={Position.Left} className="node-handle-left" />
+            <Handle type="target" position={Position.Left} id="left" className="node-handle-left" />
+            <Handle type="target" position={Position.Top} id="top" className="node-handle-top" />
             <div className="node-header">
                 <span className="node-icon"><Flag size={16} /></span>
                 <span className="node-title">End</span>

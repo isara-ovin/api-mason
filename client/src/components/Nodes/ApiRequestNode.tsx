@@ -117,7 +117,8 @@ const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
                 lineStyle={{ borderColor: 'var(--accent-primary)' }}
             />
 
-            <Handle type="target" position={Position.Left} className="node-handle-left" />
+            <Handle type="target" position={Position.Left} id="left" className="node-handle-left" />
+            <Handle type="target" position={Position.Top} id="top" className="node-handle-top" />
 
             <div className="node-header" onClick={toggleExpanded}>
                 <span className="node-icon"><Globe size={14} /></span>
@@ -194,7 +195,8 @@ const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
                 </div>
             )}
 
-            <Handle type="source" position={Position.Right} className="node-handle-right" />
+            <Handle type="source" position={Position.Right} id="right" className="node-handle-right" />
+            <Handle type="source" position={Position.Bottom} id="bottom" className="node-handle-bottom" />
         </m.div>
     );
 };

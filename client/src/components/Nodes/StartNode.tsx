@@ -19,7 +19,8 @@ const StartNode = ({ id }: NodeProps) => {
                 <span className="node-icon"><Rocket size={16} /></span>
                 <span className="node-title">Start</span>
             </div>
-            <Handle type="source" position={Position.Right} className="node-handle-right" />
+            <Handle type="source" position={Position.Right} id="right" className="node-handle-right" />
+            <Handle type="source" position={Position.Bottom} id="bottom" className="node-handle-bottom" />
         </m.div>
     );
 };
