@@ -1,6 +1,6 @@
 import express from 'express';
-import db from '../db/connection';
-import { parsePostmanEnvironment } from '../services/envResolver';
+import db from '../db/connection.js';
+import { parsePostmanEnvironment } from '../services/envResolver.js';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();

@@ -1,6 +1,6 @@
 import express from 'express';
-import db from '../db/connection';
-import { parsePostmanCollection } from '../services/collectionParser';
+import db from '../db/connection.js';
+import { parsePostmanCollection } from '../services/collectionParser.js';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();

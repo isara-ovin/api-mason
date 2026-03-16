@@ -29,4 +29,4 @@ APIMason provides a lightweight, multi-stage, single-container Docker execution 
 ```bash
 docker-compose up -d --build
 ```
-Once built, navigate to `http://localhost:3001` to use the application. All executions and saves will be persisted locally to the Docker volume inside your `./server/data` director.
+Once built, navigate to `http://localhost:1010` to use the application. All executions and saves will be persisted locally to the Docker volume inside your `./server/data` director.

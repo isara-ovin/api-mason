@@ -1,7 +1,7 @@
-import db from './connection';
+import db from './connection.js';
 
 const migrations = [
-    `
+  `
   CREATE TABLE IF NOT EXISTS collections (
     id            TEXT PRIMARY KEY,
     name          TEXT NOT NULL,
@@ -11,7 +11,7 @@ const migrations = [
     updated_at    DATETIME DEFAULT CURRENT_TIMESTAMP
   );
   `,
-    `
+  `
   CREATE TABLE IF NOT EXISTS environments (
     id            TEXT PRIMARY KEY,
     name          TEXT NOT NULL,
@@ -20,7 +20,7 @@ const migrations = [
     created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
   );
   `,
-    `
+  `
   CREATE TABLE IF NOT EXISTS orchestrations (
     id              TEXT PRIMARY KEY,
     name            TEXT NOT NULL,
@@ -32,7 +32,7 @@ const migrations = [
     updated_at      DATETIME DEFAULT CURRENT_TIMESTAMP
   );
   `,
-    `
+  `
   CREATE TABLE IF NOT EXISTS executions (
     id                TEXT PRIMARY KEY,
     orchestration_id  TEXT NOT NULL REFERENCES orchestrations(id) ON DELETE CASCADE,
@@ -45,10 +45,10 @@ const migrations = [
 ];
 
 export function runMigrations() {
-    db.transaction(() => {
-        for (const migration of migrations) {
-            db.prepare(migration).run();
-        }
-    })();
-    console.log('Migrations completed successfully');
+  db.transaction(() => {
+    for (const migration of migrations) {
+      db.prepare(migration).run();
+    }
+  })();
+  console.log('Migrations completed successfully');
 }

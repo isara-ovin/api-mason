@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 1010;
 
 // Run database migrations
 runMigrations();
@@ -40,4 +40,6 @@ app.get('*', (req, res) => {
 
 app.listen(Number(port), '0.0.0.0', () => {
     console.log(`Server is running on http://0.0.0.0:${port}`);
+    console.log(`\n🚀 APIMason is ready! Open your browser to:`);
+    console.log(`   http://localhost:${port}\n`);
 });

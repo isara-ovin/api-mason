@@ -8,6 +8,8 @@ RUN npm run build
 
 # Stage 2: Build the Express server
 FROM node:20-alpine AS server-builder
+# Install build dependencies for better-sqlite3
+RUN apk add --no-cache python3 make g++
 WORKDIR /app/server
 COPY server/package*.json ./
 RUN npm ci
@@ -16,6 +18,8 @@ RUN npm run build
 
 # Stage 3: Production image
 FROM node:20-alpine
+# Install runtime dependencies if needed (better-sqlite3 may need some libs)
+RUN apk add --no-cache python3 make g++ 
 WORKDIR /app
 
 # Install production dependencies for server
@@ -32,7 +36,7 @@ COPY --from=client-builder /app/client/dist ./client/dist
 RUN mkdir -p ./server/data
 
 # Expose the server port
-EXPOSE 3001
+EXPOSE 1010
 
 # Start the server (which will serve the client static files)
 CMD ["node", "server/dist/index.js"]

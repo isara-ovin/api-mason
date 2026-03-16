@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const dbPath = path.join(__dirname, '../../data/apimason.db');
-const db = new Database(dbPath, { verbose: console.log });
+const db = new Database(dbPath);
 
 db.pragma('journal_mode = WAL');
 
