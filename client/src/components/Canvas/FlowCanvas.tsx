@@ -74,6 +74,8 @@ const FlowCanvasInner: React.FC = () => {
                             url: request.url,
                             headers: request.headers,
                             body: request.body,
+                            expanded: true,
+                            editing: true,
                         },
                     };
                     addNode(newNode);
@@ -95,7 +97,7 @@ const FlowCanvasInner: React.FC = () => {
                 id: uuidv4(),
                 type,
                 position,
-                data: { label: `${type} node` },
+                data: { label: `${type} node`, expanded: true, editing: true },
             };
 
             addNode(newNode);

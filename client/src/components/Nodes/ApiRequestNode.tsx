@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { Handle, Position, type NodeProps, NodeResizer } from '@xyflow/react';
 import { m } from 'framer-motion';
 import { Globe, ChevronRight, ChevronLeft } from 'lucide-react';
@@ -55,7 +55,7 @@ export const UrlPreview: React.FC<{
 };
 
 const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
-    const [expanded, setExpanded] = useState(false);
+    const expanded = !!data.expanded;
     const updateNodeData = useFlowStore(s => s.updateNodeData);
     const updateNodeDimensions = useFlowStore(s => s.updateNodeDimensions);
     const currentBlockId = useExecutionStore(s => s.currentBlockId);
@@ -85,16 +85,10 @@ const ApiRequestNode = ({ data, id, selected }: NodeProps) => {
 
     const toggleExpanded = useCallback((e?: React.MouseEvent) => {
         e?.stopPropagation();
-        if (expanded) {
-            // Collapsing: Save dimensions right NOW while it's still large in the store
-            updateNodeDimensions(id, false);
-            setExpanded(false);
-        } else {
-            // Expanding: Restore dimensions right NOW
-            updateNodeDimensions(id, true);
-            setExpanded(true);
-        }
-    }, [expanded, id, updateNodeDimensions]);
+        const newExpanded = !expanded;
+        updateNodeDimensions(id, newExpanded);
+        set({ expanded: newExpanded });
+    }, [expanded, id, updateNodeDimensions, set]);
 
     const showBody = ['POST', 'PUT', 'PATCH'].includes(method);
 

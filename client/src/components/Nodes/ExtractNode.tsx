@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { m } from 'framer-motion';
 import { Braces, Plus, X, ChevronRight } from 'lucide-react';
@@ -16,7 +16,7 @@ interface ExtractionRow {
 }
 
 const ExtractNode = ({ data, id }: NodeProps) => {
-    const [expanded, setExpanded] = useState(false);
+    const expanded = !!data.expanded;
     const updateNodeData = useFlowStore(s => s.updateNodeData);
     const { environments, selectedEnvironmentId } = useCollectionStore();
     const currentBlockId = useExecutionStore(s => s.currentBlockId);
@@ -63,7 +63,7 @@ const ExtractNode = ({ data, id }: NodeProps) => {
             <Handle type="target" position={Position.Left} id="left" className="node-handle-left" />
             <Handle type="target" position={Position.Top} id="top" className="node-handle-top" />
 
-            <div className="node-header" onClick={() => setExpanded(e => !e)}>
+            <div className="node-header" onClick={() => updateNodeData(id, { expanded: !expanded })}>
                 <span className="node-icon"><Braces size={14} /></span>
                 <span className="node-title" style={{ flex: 1 }}>{label}</span>
                 <ChevronRight size={12} style={{ transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }} />

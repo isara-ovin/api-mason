@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { m } from 'framer-motion';
 import { Clock } from 'lucide-react';
@@ -6,7 +6,7 @@ import { useFlowStore } from '../../store/flowStore';
 import { useExecutionStore } from '../../store/executionStore';
 
 const DelayNode = ({ data, id }: NodeProps) => {
-    const [editing, setEditing] = useState(false);
+    const editing = !!data.editing;
     const updateNodeData = useFlowStore(s => s.updateNodeData);
     const currentBlockId = useExecutionStore(s => s.currentBlockId);
     const isExecuting = currentBlockId === id;
@@ -21,7 +21,7 @@ const DelayNode = ({ data, id }: NodeProps) => {
         >
             <Handle type="target" position={Position.Left} id="left" className="node-handle-left" />
             <Handle type="target" position={Position.Top} id="top" className="node-handle-top" />
-            <div className="node-header" onClick={() => setEditing(e => !e)}>
+            <div className="node-header" onClick={() => updateNodeData(id, { editing: !editing })}>
                 <span className="node-icon"><Clock size={14} /></span>
                 <span className="node-title">{label}</span>
             </div>
